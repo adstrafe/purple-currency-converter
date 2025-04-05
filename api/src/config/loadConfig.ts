@@ -5,23 +5,17 @@ import * as ss from 'superstruct';
 
 import { ApplicationError } from '~/ApplicationError';
 
-// const SqlServerConfig = ss.object({
-// 	server: ss.string(),
-// 	port: ss.optional(ss.integer()),
-// 	user: ss.string(),
-// 	password: ss.string(),
-// 	database: ss.string(),
-// 	options: ss.optional(ss.object({
-// 		encrypt: ss.optional(ss.boolean()),
-// 		trustServerCertificate: ss.optional(ss.boolean())
-// 	}))
-// });
-
 const MainConfig = ss.object({
-	// userDatabase: SqlServerConfig,
 	server: ss.object({
 		host: ss.string(),
 		port: ss.integer()
+	}),
+	api: ss.object({
+		endpoint: ss.string(),
+		key: ss.string()
+	}),
+	database: ss.object({
+		uri: ss.string()
 	})
 });
 

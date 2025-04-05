@@ -1,51 +1,49 @@
-import { createServer } from 'node:http';
-
-import { ApiErrorCode, ApplicationError } from './ApplicationError';
 import { loadConfig } from './config/loadConfig';
-import { Route } from './generic/route';
-import { BodyParser } from './middleware/BodyParser';
+import { connectDatabase } from '../database/MongoClient';
+import { ErrorHandler } from './middleware/ErrorHandler';
+import { StatisticsService } from './services/StatisticsService';
+import { FixerController } from './controllers/FixerController';
 
-import { test } from '~/endpoints/test';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import Router from 'koa-router';
 
-const config = await loadConfig(process.argv[3]);
-const bodyParser = new BodyParser();
+// init config, database connection, ...
+const config = await loadConfig(process.argv[2]);
+const db = await connectDatabase(config.database.uri, 'currency-converter');
 
-const ROUTES: { [key: string]: Route } = {
-	'/test': test
-};
+const server = new Koa();
+const errorHandler = new ErrorHandler();
+const router = new Router();
 
-const server = createServer(async (req, res) => {
-	let result;
-	const reqTimeStart = Date.now();
-	try {
-		const route = ROUTES[req.url!];
-		if (!route) {
-			throw new ApplicationError({
-				apiErrorCode: ApiErrorCode.NOT_FOUND,
-				httpStatusCode: 404,
-				publicMessage: 'Unknown endpoint'
-			});
-		}
+// set up all the services, controllers and their dependencies
+const statisticsService = new StatisticsService(db);
+const fixerController = new FixerController(config, statisticsService);
 
-		result = await route({
-			req,
-			res,
-			bodyParser
-		});
-	}
-	catch (err: any) {
-		res.statusCode = err.httpStatusCode ?? 500;
-		result = {
-			message: err.publicMessage ?? 'Unknown server error'
-		}
-	}
-	const reqTimeEnd = Date.now();
-	console.log(`${new Date().toISOString()} - ${req.url} - ${res.statusCode} - ms: ${reqTimeEnd - reqTimeStart}`);
+// use middleware
+server.use(bodyParser());
+server.use(errorHandler.use.bind(errorHandler));
 
-	res.setHeader('Content-Type', 'Application/Json; charset=utf-8');
-	res.end(JSON.stringify(result));
+server.use(async (ctx, next) => {
+	await next();
+	console.log(`${ctx.method} ${ctx.url}`);
 });
 
+// register routes
+router.post('/convert', async ctx => {
+	const result = await fixerController.convert(ctx.request.body as any);
+	ctx.status = 200;
+	ctx.body = {
+		result
+	};
+});
+
+// use router
+server
+	.use(router.routes())
+	.use(router.allowedMethods());
+
+// start the server
 server.listen(
 	config.server.port,
 	config.server.host

@@ -3,9 +3,16 @@
 	"version": "1.0.0",
 	"private": true,
 	"dependencies": {
+		"koa": "2.16.0",
+		"koa-bodyparser": "4.4.1",
+		"koa-router": "13.0.1",
+		"mongodb": "6.15.0",
 		"superstruct": "2.0.2"
 	},
 	"devDependencies": {
+		"@types/koa-bodyparser": "4.3.12",
+		"@types/koa-router": "7.4.8",
+		"@types/koa": "2.15.0",
 		"@types/node": "22.14.0",
 		"@types/webpack-node-externals": "3.0.4",
 		"graphql": "16.10.0",
@@ -18,7 +25,7 @@
 	},
 	"scripts": {
 		"build": "webpack --config webpack.config.js",
-		"start": "node dist/server.js",
+		"start": "node dist/server.js config/development.json",
 		"dev": "webpack --watch --config webpack.config.js"
 	}
 }
