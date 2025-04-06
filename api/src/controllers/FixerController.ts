@@ -35,7 +35,7 @@ export class FixerController {
 		if (error) {
 			throw new ApplicationError({
 				apiErrorCode: ApiErrorCode.UNKNOWN,
-				httpStatusCode: error.code,
+				httpStatusCode: 500,
 				publicMessage: error.info ?? 'Fixer api error'
 			});
 		}
@@ -43,8 +43,7 @@ export class FixerController {
 		// update conversions
 		this.statisticsService.update({ name: 'statistics' }, {
 			$inc: {
-				totalConversions: 1,
-				totalConvertedToUSD: conversionCurrency === 'USD' ? 1 : 0
+				totalConversions: 1
 			}
 		});
 

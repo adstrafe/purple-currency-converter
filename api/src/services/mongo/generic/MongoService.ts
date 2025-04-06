@@ -33,7 +33,7 @@ export abstract class MongoService<T extends Document> implements BaseMongoServi
 		const result = await this.collection.findOne(filter);
 		assertSingleResult(result);
 
-		return result;
+		return result as WithId<T>;
 	}
 
 	public getAll() {
