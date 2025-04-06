@@ -18,6 +18,7 @@
 
 	```bash
 		git clone git@github.com:adstrafe/purple-currency-converter.git
+		cd purple-currency-converter
 	```
 
 2. Set up backend config:
