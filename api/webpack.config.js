@@ -1,6 +1,6 @@
-import path from 'node:path';
 import { fileURLToPath } from 'url';
 
+import path from 'node:path';
 import nodeExternals from 'webpack-node-externals';
 
 const __filename = fileURLToPath(import.meta.url);
