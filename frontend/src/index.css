@@ -1,0 +1,23 @@
+:root {
+	font-family: "Roboto", sans-serif;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: #EAECEF;
+	color: #000;
+}
+
+#app-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	gap: 28px;
+}

@@ -1,0 +1,12 @@
+.select {
+	color: #000;
+	background: #FFF;
+	font-size: 14px;
+	font-weight: 400;
+	padding: 0 .4rem;
+	border: 1px solid #CCCCCC;
+	border-radius: 6px;
+	width: 250px;
+	height: 44px;
+	box-sizing: border-box;
+}
