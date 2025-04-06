@@ -6,11 +6,11 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 	readonly selectOptions: string[];
 }
 
-export const Select = ({ selectOptions, ...props }: SelectProps) => (
-	<select {...props}>
-		{selectOptions.map((option, i) => (
+export const Select = ({ selectOptions, className, ...props }: SelectProps) => (
+	<select className={`select ${className}`} {...props}>
+		{selectOptions.map(option => (
 			<option
-				key={i}
+				key={option}
 				value={option}
 			>
 				{option}
