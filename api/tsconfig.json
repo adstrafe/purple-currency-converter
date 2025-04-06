@@ -1,26 +1,24 @@
 {
 	"compilerOptions": {
-		/* base options */
-		"skipLibCheck": true,
-		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"allowJs": false,
-
-		/* strictness */
-		"strict": true,
-
-		/* transpiling */
-		"target": "ESNext",
+		"baseUrl": "./src",
+		"esModuleInterop": true,
+		"lib": [
+			"ESNext"
+		],
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
-		"outDir": "dist",
-		"noEmit": false,
-		"sourceMap": true,
-
-		/* paths */
-		"baseUrl": "./src",
+		"skipLibCheck": true,
+		"strict": true,
 		"paths": {
 			"~/*": ["./*"]
-		}
-	}
+		},
+		"target": "ESNext",
+		"types": [
+			"node"
+		]
+	},
+	"include": [
+		"./src/**/*"
+	]
 }
