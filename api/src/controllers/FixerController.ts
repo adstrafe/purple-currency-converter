@@ -23,14 +23,14 @@ export class FixerController {
 		}, ConversionModel);
 
 		// convert
-		const response = await fetch(`${this.config.api.endpoint}/convert?access_key=${this.config.api.key}&from=${baseCurrency}&to=${conversionCurrency}&amount=${amount}`, {
+		const call = await fetch(`${this.config.api.endpoint}/convert?access_key=${this.config.api.key}&from=${baseCurrency}&to=${conversionCurrency}&amount=${amount}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json; charset=utf-8'
 			}
 		});
 
-		const { result, error } = await response.json();
+		const { result, error } = await call.json() as any;
 
 		if (error) {
 			throw new ApplicationError({

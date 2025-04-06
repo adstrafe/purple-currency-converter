@@ -1,5 +1,7 @@
 import { loadConfig } from './config/loadConfig';
 import { connectDatabase } from '../database/MongoClient';
+import { currenciesCache } from './cache/currencies';
+import { CurrenciesController } from './controllers/CurrenciesController';
 import { ErrorHandler } from './middleware/ErrorHandler';
 import { StatisticsService } from './services/StatisticsService';
 import { FixerController } from './controllers/FixerController';
@@ -22,7 +24,8 @@ const router = new Router();
 const statisticsService = new StatisticsService(db);
 
 const fixerController = new FixerController(config, statisticsService);
-const statisticsController = new StatisticsController(statisticsService)
+const statisticsController = new StatisticsController(statisticsService);
+const currenciesController = new CurrenciesController();
 
 // use middleware
 server.use(bodyParser());
@@ -48,8 +51,16 @@ router.get('/statistics', async ctx => {
 	ctx.status = 200;
 	ctx.body = {
 		totalConversions
-	}
-})
+	};
+});
+
+router.get('/currencies', async ctx => {
+	const currencies = await currenciesController.getCurrencies(currenciesCache);
+	ctx.status = 200;
+	ctx.body = {
+		currencies
+	};
+});
 
 // use router
 server
